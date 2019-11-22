@@ -1,15 +1,30 @@
 <template>
   <div id="app">
+    <!-- header -->
     <el-header>
       <m-app-id />
-      <m-header-menu @select="selectHeaderMenu" />
+      <i class="collapse iconfont" :class="isCollapse ? 'm-icon-indent' : 'm-icon-outdent'" @click="collapse"></i>
+      <m-header-menu @select="handleHeaderMenuSelect" />
     </el-header>
+    <!-- body -->
     <div class="body-wrapper">
       <div class="aside-menu-panel" :class="{'is-fold': isFold}">
         <div class="aside-menu-wrapper">
           <el-aside width="auto">
-            <m-aside-menu @select="handleAsideMenuSelected" />
+            <m-aside-menu @select="handleAsideMenuSelect" />
           </el-aside>
+        </div>
+      </div>
+
+      <div class="body-main-right" :class="{'is-fold': isFold}">
+        <div class="body-main-right-panel">
+          <div class="body-main-right-container">
+            <div class="body-main-right-box app-container container-main-body" ref="appContainer">
+              <transition name="fade-transverse">
+                <router-view></router-view>
+              </transition>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -17,9 +32,9 @@
 </template>
 
 <script>
-import mAppId from '@/components/mAppId';
-import mHeaderMenu from '@/components/mHeaderMenu';
-import mAsideMenu from '@/components/mAsideMenu';
+import mAppId from '@/components/skeleton/mAppId';
+import mHeaderMenu from '@/components/skeleton/mHeaderMenu';
+import mAsideMenu from '@/components/skeleton/mAsideMenu';
 
 export default {
   components: {
@@ -30,10 +45,17 @@ export default {
   data() {
     return {
       isFold: false,
+      isCollapse: false,
     };
   },
   methods: {
-    selectHeaderMenu(code, index) {
+    collapse() {
+
+    },
+    handleHeaderMenuSelect(code, index) {
+      console.log(code, index);
+    },
+    handleAsideMenuSelect(code, index) {
       console.log(code, index);
     },
   },
@@ -109,6 +131,36 @@ export default {
         }
         .el-submenu__title i.el-icon-arrow-down:before {
           // content: '\e60a';
+        }
+      }
+    }
+    .body-main-right {
+      position: absolute;
+      left: 240px;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      background: @gray-3;
+      transition: left 0.5s;
+      &.is-fold {
+        /*left: 65px;*/
+        left: 0;
+      }
+      .body-main-right-panel {
+        width: 100%;
+        height: 100%;
+        padding: 16px 16px 0 16px;
+        .body-main-right-container {
+          width: 100%;
+          height: 100%;
+          .body-main-right-box {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            &::-webkit-scrollbar {
+              display: none !important;
+            }
+          }
         }
       }
     }
