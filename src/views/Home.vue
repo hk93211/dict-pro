@@ -1,18 +1,35 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div>123</div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'home',
   components: {
-    HelloWorld,
+  },
+  computed: {
+    ...mapState({
+      userInfo: state => state.base.userInfo,
+    }),
+  },
+  methods: {
+    ...mapActions([
+      'base/login',
+    ]),
+  },
+  created() {
+    const params4query = {
+      username: '80457547',
+      password: 'Azxs1234',
+    };
+    this['base/login'](params4query);
+    setTimeout(() => {
+      console.log(this.userInfo);
+    }, 6000);
   },
 };
 </script>
